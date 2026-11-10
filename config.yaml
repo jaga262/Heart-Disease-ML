@@ -1,0 +1,37 @@
+# Heart Disease MLOps Production Pipeline
+
+data:
+  raw_path: data/raw/heart_disease_uci.csv
+  processed_dir: data/processed
+  target_column: num
+  id_column: id
+
+split:
+  test_size: 0.2
+  random_state: 42
+
+model:
+  n_estimators: 150
+  max_depth: 10
+  random_state: 42
+  class_weight: balanced
+
+mlflow:
+  tracking_uri: "sqlite:///mlflow.db"
+  experiment_name: Heart_Disease_Production
+
+registry:
+  model_name: Heart_Disease_Production_Model
+  decision_metric: recall
+
+quality_gate:
+  metric: recall
+  minimum_value: 0.75
+
+paths:
+  preprocessor: models/preprocessor.pkl
+  model: models/heart_disease_model.pkl
+  evaluation_report: reports/evaluation_report.json
+  quality_gate_report: reports/quality_gate_report.json
+  failure_report: reports/failure_report.json
+  inference_output: outputs/inference_predictions.csv
